@@ -11,17 +11,19 @@ APP_ID = os.getenv("GH_APP_ID")
 
 app = Flask(__name__)
 
-BITBOT_STR = "@samrat"
+BITBOT_STR = "samrat help"
 BOG_NAME = "GTBitsOfGood"
 
 @app.route("/webhook", methods=['POST'])
 def read_incoming_webhook():
     if request.headers['X-GitHub-Event'] != "issue_comment":
-        return
+        print("not a comment")
+        return "not a comment"
 
     body = request.get_json()
     if body['action'] != 'created' or BITBOT_STR not in body['comment']['body']:
-        return
+        print("dont care")
+        return "Don't care"
     
     repository = body['repository']
     full_repo_subpath = repository['full_name']
@@ -33,8 +35,9 @@ def read_incoming_webhook():
 
 
 
-    if BOG_NAME not in repo_name:
-        return
+    if BOG_NAME not in owner:
+        print("Not a GTBog")
+        return "Unauthorized"
 
     user = body['comment']['user']
     name = body['name']
@@ -47,6 +50,7 @@ def read_incoming_webhook():
     comment_body = build_howto(name, issue_title, gen_repo_url(repo_name))
 
     create_comment(owner, repo_name, issue_id, comment_body)
+    return "Success"
 
 def gen_repo_url(name):
     return f'https://github.com/{name}'
