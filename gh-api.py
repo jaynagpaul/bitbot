@@ -61,16 +61,39 @@ def gen_repo_url(name):
 def get_comment_create_url(owner, repo, issue):
     return f'https://api.github.com/repos/{owner}/{repo}/issues/{issue}/comments'
 
+def get_installation_url(owner, repo):
+    return f'https://api.github.com/repos/{owner}/{repo}/installation'
+
+def get_access_token_url(installation_id):
+    return f'https://api.github.com/app/installations/{installation_id}/access_tokens'
+
+def get_jwt_header():
+    return {
+        'Authorization': f'Bearer {gen_jwt()}',
+        'Accept': 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28' 
+    }
+
+def get_access_token(installation_id):
+    resp = requests.post(get_access_token_url(installation_id), headers=get_jwt_header())
+    return resp.json()['token']
+
 def create_comment(owner, repo, issue, comment):
     s = requests.Session()
+    # Get id of installation
+    installation_resp = s.get(get_installation_url(owner, repo), headers=get_jwt_header())
+    print(f'install: {installation_resp.json()}')
+    # Get the access token for this installation
+    access_token = get_access_token(installation_resp.json()['id'])
+
     body = {
-        'owner': owner,
-        'repo': repo,
+        'owner': 'samrat-bot-app',
+        'repo': f'{owner}/{repo}',
         'issue_number': issue,
         'body': comment,
     }
     headers = {
-        'Authorization': f'Bearer {gen_jwt()}',
+        'Authorization': f'Bearer {access_token}',
         'Accept': 'application/vnd.github+json',
         'X-GitHub-Api-Version': '2022-11-28'
     }
@@ -84,7 +107,7 @@ def gen_jwt():
         # JWT expiration time (10 minutes maximum)
         'exp': int(time.time()) + 500,
         # GitHub App's identifier
-        'iss': APP_ID
+        'iss': int(APP_ID)
     }
     jwt_ins = PyJWT()
     encoded_jwt = jwt_ins.encode(payload, SECRET, algorithm='RS256')
