@@ -40,11 +40,12 @@ You should be very specific and detailed in your response. The ticket is for {de
 def _clone_repo(git_url: str, output_dir: PathLike):
     Repo.clone_from(git_url, output_dir, depth=1)
 
-def _create_gitignore_validator(gitignore: str) -> Callable[[PathLike], bool]:
-    return lambda path: not any(path.match(pattern) for pattern in gitignore.split("\n") if pattern != "")
+
+def _create_filevalidator(gitignore: str) -> Callable[[PathLike], bool]:
+    return lambda path: os.path.splitext(path)[1] in language_extensions and not any(path.match(pattern) for pattern in gitignore.split("\n") if pattern != "")
 
 def _get_code(repo_dir: PathLike) -> str:
-    should_read = _create_gitignore_validator(Path(repo_dir, ".gitignore").read_text())
+    should_read = _create_filevalidator(Path(repo_dir, ".gitignore").read_text())
 
     code_list = []
     for file in Path(repo_dir).glob("**/*"):
@@ -72,3 +73,103 @@ def _fetch_code(git_url: str) -> str:
 
     return code
 
+language_extensions = [
+    ".py",    # Python
+    ".js",    # JavaScript
+    ".java",  # Java
+    ".html",  # HTML
+    ".css",   # CSS
+    ".php",   # PHP
+    ".cpp",   # C++
+    ".c",     # C
+    ".rb",    # Ruby
+    ".ts",    # TypeScript
+    ".swift", # Swift
+    ".go",    # Go
+    ".cs",    # C#
+    ".dart",  # Dart
+    ".sql",   # SQL
+    ".json",  # JSON
+    ".xml",   # XML
+    ".kt",    # Kotlin
+    ".sh",    # Shell script
+    ".jsx",   # JSX (JavaScript Extension)
+    ".tsx",   # TSX (TypeScript Extension)
+    ".yaml",  # YAML
+    ".toml",  # TOML
+    ".ini",   # INI
+    ".md",    # Markdown
+    ".r",     # R
+    ".pl",    # Perl
+    ".swift", # Swift
+    ".rs",    # Rust
+    ".lua",   # Lua
+    ".scala", # Scala
+    ".asm",   # Assembly
+    ".h",     # Header file
+    ".hpp",   # C++ Header file
+    ".cshtml",# Razor (C#)
+    ".coffee",# CoffeeScript
+    ".ejs",   # EJS (Embedded JavaScript)
+    ".ejs",   # EJS (Embedded JavaScript)
+    ".less",  # Less
+    ".scss",  # SCSS
+    ".sass",  # Sass
+    ".styl",  # Stylus
+    ".groovy",# Groovy
+    ".tsx",   # TSX (TypeScript Extension)
+    ".v",     # Verilog
+    ".vhdl",  # VHDL
+    ".nim",   # Nim
+    ".zig",   # Zig
+    ".elm",   # Elm
+    ".erl",   # Erlang
+    ".clj",   # Clojure
+    ".fs",    # F#
+    ".f90",   # Fortran
+    ".ada",   # Ada
+    ".sml",   # Standard ML
+    ".ocaml", # OCaml
+    ".yaml",  # YAML
+    ".proto", # Protocol Buffers
+    ".bat",   # Batch file
+    ".cmd",   # Windows Command Script
+    ".fish",  # Fish shell
+    ".awk",   # AWK
+    ".raku",  # Raku
+    ".haskell",# Haskell
+    ".lisp",  # Lisp
+    ".forth", # Forth
+    ".d",     # D
+    ".cr",    # Crystal
+    ".moon",  # MoonScript
+    ".scm",   # Scheme
+    ".csharp",# C# Script
+    ".ex",    # Elixir
+    ".ml",    # OCaml (Alternative extension)
+    ".nix",   # Nix
+    ".asm",   # Assembly (Alternative extension)
+    ".hs",    # Haskell (Alternative extension)
+    ".pl",    # Perl (Alternative extension)
+    ".php3",  # PHP (Alternative extension)
+    ".tcl",   # Tcl
+    ".r",     # R (Alternative extension)
+    ".njk",   # Nunjucks (JavaScript Templating Engine)
+    ".ejs",   # EJS (Alternative extension)
+    ".vue",   # Vue.js
+    ".svelte",# Svelte
+    ".julia", # Julia
+    ".pde",   # Processing
+    ".fish",  # Fish shell (Alternative extension)
+    ".zsh",   # Zsh
+    ".awk",   # AWK (Alternative extension)
+    ".groovy",# Groovy (Alternative extension)
+    ".vbs",   # VBScript
+    ".pyx",   # Cython
+    ".yml",   # YAML (Alternative extension)
+    ".yaml",  # YAML (Alternative extension)
+    ".pddl",  # Planning Domain Definition Language
+    ".hcl",   # HCL (HashiCorp Configuration Language)
+    ".fish",  # Fish shell (Alternative extension)
+    ".tsv",   # Tab-Separated Values
+]
