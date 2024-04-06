@@ -39,15 +39,12 @@ def read_incoming_webhook():
         print("Not a GTBog")
         return "Unauthorized"
 
-    user = body['comment']['user']
-    name = user['name']
-
     issue = body['issue']
     issue_id = issue['id']
     issue_title = issue['title']
 
     create_comment(owner, repo_name, issue_id, "Generating how-to...")
-    comment_body = build_howto(name, issue_title, gen_repo_url(repo_name))
+    comment_body = build_howto("BOG Developer", issue_title, gen_repo_url(repo_name))
 
     create_comment(owner, repo_name, issue_id, comment_body)
     return "Success"
