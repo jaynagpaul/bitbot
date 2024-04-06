@@ -35,7 +35,7 @@ You should be very specific and detailed in your response. The ticket is for {de
         ],
     )
 
-    return resp.content
+    return resp.content[-1].text
 
 def _clone_repo(git_url: str, output_dir: PathLike):
     Repo.clone_from(git_url, output_dir, depth=1)
