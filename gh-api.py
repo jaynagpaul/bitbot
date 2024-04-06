@@ -1,10 +1,13 @@
 from ghapi.all import GhApi
 from flask import Flask, request
 from ai import build_howto
-from ghapi.all import GhApi
 import time
 from jwt import PyJWT
 import os
+from dotenv import load_dotenv
+import requests
+
+load_dotenv()
 
 SECRET = os.getenv("GH_SECRET")
 APP_ID = os.getenv("GH_APP_ID")
@@ -28,7 +31,9 @@ def read_incoming_webhook():
     repository = body['repository']
     full_repo_subpath = repository['full_name']
     repo_path_components = full_repo_subpath.split('/')
-    repo_url = gen_repo_url(repository['full_name'])
+    repo_url = gen_repo_url(full_repo_subpath)
+
+    print(f'repo url: {repo_url}')
 
     owner = repo_path_components[0]
     repo_name = repo_path_components[1]
@@ -40,11 +45,12 @@ def read_incoming_webhook():
         return "Unauthorized"
 
     issue = body['issue']
-    issue_id = issue['id']
+    issue_id = issue['number']
     issue_title = issue['title']
 
+    print(f'comment url: {get_comment_create_url(owner, repo_name, issue_id)}')
     create_comment(owner, repo_name, issue_id, "Generating how-to...")
-    comment_body = build_howto("BOG Developer", issue_title, gen_repo_url(repo_name))
+    comment_body = build_howto("BOG Developer", issue_title, repo_url)
 
     create_comment(owner, repo_name, issue_id, comment_body)
     return "Success"
@@ -52,9 +58,24 @@ def read_incoming_webhook():
 def gen_repo_url(name):
     return f'https://github.com/{name}'
 
+def get_comment_create_url(owner, repo, issue):
+    return f'https://api.github.com/repos/{owner}/{repo}/issues/{issue}/comments'
+
 def create_comment(owner, repo, issue, comment):
-    api = GhApi(token=gen_jwt())
-    api.issues.create_comment(owner, repo, issue, comment)
+    s = requests.Session()
+    body = {
+        'owner': owner,
+        'repo': repo,
+        'issue_number': issue,
+        'body': comment,
+    }
+    headers = {
+        'Authorization': f'Bearer {gen_jwt()}',
+        'Accept': 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28'
+    }
+    resp = s.post(get_comment_create_url(owner, repo, issue), data=body, headers=headers)
+    print(f'GH api response: {resp.text}')
 
 def gen_jwt():
     payload = {
@@ -67,4 +88,6 @@ def gen_jwt():
     }
     jwt_ins = PyJWT()
     encoded_jwt = jwt_ins.encode(payload, SECRET, algorithm='RS256')
+    print(f'secret: {SECRET}')
+    print(f'encoded: {encoded_jwt}')
     return encoded_jwt
