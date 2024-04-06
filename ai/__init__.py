@@ -88,17 +88,9 @@ language_extensions = [
     ".go",    # Go
     ".cs",    # C#
     ".dart",  # Dart
-    ".sql",   # SQL
-    ".json",  # JSON
-    ".xml",   # XML
     ".kt",    # Kotlin
-    ".sh",    # Shell script
     ".jsx",   # JSX (JavaScript Extension)
     ".tsx",   # TSX (TypeScript Extension)
-    ".yaml",  # YAML
-    ".toml",  # TOML
-    ".ini",   # INI
-    ".md",    # Markdown
     ".r",     # R
     ".pl",    # Perl
     ".swift", # Swift
@@ -130,11 +122,6 @@ language_extensions = [
     ".ada",   # Ada
     ".sml",   # Standard ML
     ".ocaml", # OCaml
-    ".yaml",  # YAML
-    ".proto", # Protocol Buffers
-    ".bat",   # Batch file
-    ".cmd",   # Windows Command Script
-    ".fish",  # Fish shell
     ".awk",   # AWK
     ".raku",  # Raku
     ".haskell",# Haskell
@@ -147,7 +134,6 @@ language_extensions = [
     ".csharp",# C# Script
     ".ex",    # Elixir
     ".ml",    # OCaml (Alternative extension)
-    ".nix",   # Nix
     ".asm",   # Assembly (Alternative extension)
     ".hs",    # Haskell (Alternative extension)
     ".pl",    # Perl (Alternative extension)
@@ -160,16 +146,9 @@ language_extensions = [
     ".svelte",# Svelte
     ".julia", # Julia
     ".pde",   # Processing
-    ".fish",  # Fish shell (Alternative extension)
     ".zsh",   # Zsh
     ".awk",   # AWK (Alternative extension)
     ".groovy",# Groovy (Alternative extension)
     ".vbs",   # VBScript
     ".pyx",   # Cython
-    ".yml",   # YAML (Alternative extension)
-    ".yaml",  # YAML (Alternative extension)
-    ".pddl",  # Planning Domain Definition Language
-    ".hcl",   # HCL (HashiCorp Configuration Language)
-    ".fish",  # Fish shell (Alternative extension)
-    ".tsv",   # Tab-Separated Values
 ]
