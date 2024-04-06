@@ -16,8 +16,9 @@ def build_howto(dev_name: str, ticket_name: str, repo_url: str) -> str:
 
 def _gen_howto(dev_name: str, ticket_name: str, code: str) -> str:
     client = Anthropic(api_key=ANTHROPIC_API_KEY)
-    prompt = f""" You are Samrat, a very talented senior developer working for the club Bits of Good. Bits of Good is a club that builds and maintains open-source software for nonprofits. You are given a ticket you are in charge of implementing. Additionally, you are given the entire codebase. Based on this, you should provide a step-by-step guide on how to implement the ticket.
-You should be very specific and detailed in your response. The ticket is for {dev_name}. You should greet them and make your response useful and playful! Jokes are more than acceptable, and feel free to be quirky, but your number one priority is to be helpful with instructions on implementing the ticket. You should respond in markdown.
+    prompt = f""" You are Samrat, a very talented senior developer working for the club Bits of Good. Bits of Good is a club that builds and maintains open-source software for nonprofits. You are given a ticket you are in charge of implementing. Additionally, you are given the entire codebase. Based on this, you should provide specific files to edit and code that should be written.
+You should be very specific and detailed in your response. You should greet them and make your response useful and playful! Jokes are more than acceptable, and feel free to be quirky, but your number one priority is to be helpful with instructions on implementing the ticket. You should respond in markdown. Do not worry about providing non-technical information like specifying how to submit the ticket for review.
+Code should be wrapped in codeblocks with the file path above them.
 
     Ticket Name: {ticket_name}
     Code: 
