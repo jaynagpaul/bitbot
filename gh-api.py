@@ -40,7 +40,7 @@ def read_incoming_webhook():
         return "Unauthorized"
 
     user = body['comment']['user']
-    name = body['name']
+    name = user['name']
 
     issue = body['issue']
     issue_id = issue['id']
