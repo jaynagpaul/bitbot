@@ -4,3 +4,4 @@ ghapi==1.0.5
 GitPython==3.1.43
 gunicorn==21.2.0
 PyJWT==2.8.0
+cryptography==42.0.5
