@@ -1,6 +1,6 @@
 from ghapi.all import GhApi
 from flask import Flask, request
-from .ai import build_howto
+from ai import build_howto
 from ghapi.all import GhApi
 import time
 from jwt import PyJWT
