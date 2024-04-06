@@ -74,7 +74,7 @@ def create_comment(owner, repo, issue, comment):
         'Accept': 'application/vnd.github+json',
         'X-GitHub-Api-Version': '2022-11-28'
     }
-    resp = s.post(get_comment_create_url(owner, repo, issue), data=body, headers=headers)
+    resp = s.post(get_comment_create_url(owner, repo, issue), json=body, headers=headers)
     print(f'GH api response: {resp.text}')
 
 def gen_jwt():
@@ -82,7 +82,7 @@ def gen_jwt():
         # Issued at time
         'iat': int(time.time()),
         # JWT expiration time (10 minutes maximum)
-        'exp': int(time.time()) + 600,
+        'exp': int(time.time()) + 500,
         # GitHub App's identifier
         'iss': APP_ID
     }
@@ -90,4 +90,5 @@ def gen_jwt():
     encoded_jwt = jwt_ins.encode(payload, SECRET, algorithm='RS256')
     print(f'secret: {SECRET}')
     print(f'encoded: {encoded_jwt}')
+    print(f'app_id: {APP_ID}')
     return encoded_jwt
